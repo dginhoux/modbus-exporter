@@ -137,6 +137,32 @@ func (p *Poller) pollOnce() {
 					continue
 				}
 
+				if reg.Datatype == "UTF8" {
+					decoded := UTF8(raw)
+					if p.debug {
+						log.Printf(
+							"modbus: device=%s slave=%d register=%d name=%s value=%q (UTF8)",
+							dev.Name,
+							slave.SlaveID,
+							reg.Register,
+							reg.Name,
+							decoded,
+						)
+					}
+					p.store.Set(store.Sample{
+						Value:       1,
+						Timestamp:   time.Now().UTC(),
+						Device:      dev.Name,
+						SlaveID:     slave.SlaveID,
+						Register:    reg.Register,
+						Name:        reg.Name,
+						Unit:        reg.Unit,
+						IpAddress:   dev.Address,
+						StringValue: &decoded,
+					})
+					continue
+				}
+
 				value, ok := decode(reg.Datatype, raw)
 				if !ok {
 					log.Printf(
@@ -226,12 +252,6 @@ func decode(datatype string, raw []byte) (float64, bool) {
 
 	case "F64BE":
 		return F64BE(raw), true
-
-	// ---- String (special case) ----
-	case "UTF8":
-		// No es numérico → no exportable como gauge
-		// pero NO es error de lectura
-		return 0, false
 
 	default:
 		return 0, false

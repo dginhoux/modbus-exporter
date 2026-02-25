@@ -1,6 +1,7 @@
 package store
 
 import (
+	"strings"
 	"sync"
 	"time"
 )
@@ -16,6 +17,9 @@ type Sample struct {
 	Name      string
 	Unit      string
 	IpAddress string
+
+	// StringValue es distinto de nil solo para registros UTF8 (valor en etiqueta, no numérico).
+	StringValue *string
 }
 
 type Store struct {
@@ -39,6 +43,11 @@ func (s *Store) Set(sample Sample) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	// Clonar string para no depender del puntero recibido (p. ej. variable de bucle en el poller).
+	if sample.StringValue != nil {
+		cloned := strings.Clone(*sample.StringValue)
+		sample.StringValue = &cloned
+	}
 	s.samples[key(sample.Device, sample.SlaveID, sample.Register)] = sample
 }
 

@@ -46,13 +46,13 @@
 #     * 1 word  -> U8, U16, S16
 #     * 2 words -> U32, S32, U32LE, F32*
 #     * 4 words -> U64BE, S64BE, F64BE
+#     * UTF8    -> any (words = bytes/2; e.g. 8 words = 16 bytes)
 # - Mismatched word counts may result in incorrect values.
 
 # UTF8 datatype:
-# - UTF8 registers are read and decoded correctly,
-#   but are NOT exported as Prometheus metrics.
-# - Prometheus only supports numeric samples.
-# - UTF8 registers may be used for debugging or future metadata endpoints.
+# - UTF8 registers are read, decoded (NUL-terminated/padded), and exported as
+#   modbus_register_info with the string in the "value" label (gauge=1).
+# - words = number of 16-bit registers (e.g. 8 words = 16 bytes max string length).
 
 # Gain:
 # - Gain is applied after decoding the raw register value.
@@ -83,6 +83,15 @@ devices:
             unit: "Hz"
             gain: 1
             flags:
+          # Ejemplo registro UTF8 (serial, firmware, etc.): se expone como modbus_register_info.
+          # - register: 100
+          #   function_code: 3
+          #   name: "serial_number"
+          #   description: "Device serial (UTF-8)"
+          #   words: 8
+          #   datatype: "UTF8"
+          #   unit: ""
+          #   gain: 1
 
   - name: "ion_7400_2"
     protocol: "modbus-tcp"
