@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ------------------------------------------------------------
-# Multi-arch Docker release script for modbus-exporter
-# Builds and pushes linux/amd64 + linux/arm64 images.
-#
-# Usage:
-#   ./release-docker.sh v0.1.1
-#
-# Optional:
-#   ./release-docker.sh v0.1.1 latest
-# ------------------------------------------------------------
-
 IMAGE="atrabilis/modbus-exporter"
+BUILDER_NAME="multiarch-builder"
+PLATFORMS="linux/amd64,linux/arm64"
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 <version-tag> [also-tag-latest]"
@@ -22,27 +13,48 @@ fi
 VERSION="$1"
 TAG_LATEST="${2:-}"
 
-PLATFORMS="linux/amd64,linux/arm64"
-
 echo "==> Releasing ${IMAGE}:${VERSION}"
 echo "Platforms: ${PLATFORMS}"
 
 # ------------------------------------------------------------
-# Ensure buildx is available
+# 1) Verify Docker Engine local
 # ------------------------------------------------------------
-if ! docker buildx inspect multiarch-builder >/dev/null 2>&1; then
-  echo "==> Creating buildx builder..."
-  docker buildx create multiarch-builder
-  docker buildx use multiarch-builder
-
-else
-  docker buildx use multiarch-builder
+if ! docker info >/dev/null 2>&1; then
+  echo "ERROR: Docker Engine is not running or not accessible."
+  exit 1
 fi
 
+# Force local socket (ignore weird envs)
+export DOCKER_HOST=unix:///var/run/docker.sock
+
+# ------------------------------------------------------------
+# 2) Remove any broken builder with same name
+# ------------------------------------------------------------
+if docker buildx inspect "${BUILDER_NAME}" >/dev/null 2>&1; then
+  echo "==> Removing existing builder (${BUILDER_NAME}) to avoid corruption"
+  docker buildx rm "${BUILDER_NAME}" || true
+fi
+
+# ------------------------------------------------------------
+# 3) Install QEMU/binfmt if needed
+# ------------------------------------------------------------
+echo "==> Ensuring multi-arch emulation support"
+docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null
+
+# ------------------------------------------------------------
+# 4) Create clean builder
+# ------------------------------------------------------------
+echo "==> Creating clean buildx builder"
+docker buildx create \
+  --name "${BUILDER_NAME}" \
+  --driver docker-container \
+  --use >/dev/null
+
+echo "==> Bootstrapping builder"
 docker buildx inspect --bootstrap >/dev/null
 
 # ------------------------------------------------------------
-# Build & push
+# 5) Build & push
 # ------------------------------------------------------------
 CMD=(
   docker buildx build
@@ -63,9 +75,11 @@ echo
 
 "${CMD[@]}"
 
+echo
 echo "==> Done."
 echo "Published:"
 echo "  - ${IMAGE}:${VERSION}"
+
 if [ "${TAG_LATEST}" = "latest" ]; then
   echo "  - ${IMAGE}:latest"
 fi
