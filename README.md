@@ -170,8 +170,10 @@ More detailed example:
 #   - F32BADC  : Float32, byte-swapped
 #   - F64BE    : Float64, big-endian
 #
-# String:
-#   - UTF8     : C-style UTF-8 string (NUL-terminated / padded)
+# String (same decoding: NUL-terminated / padded UTF-8):
+#   - UTF8     : C-style UTF-8 string
+#   - UTF-8    : alias, same as UTF8
+#   - STRING   : alias, same as UTF8
 #
 # Notes:
 # - Modbus registers are 16-bit words.
@@ -193,11 +195,11 @@ More detailed example:
 #     * 4 words -> U64BE, S64BE, F64BE
 # - Mismatched word counts may result in incorrect values.
 
-# UTF8 datatype:
-# - UTF8 registers are read and decoded correctly,
-#   but are NOT exported as Prometheus metrics.
+# UTF8 / UTF-8 / STRING datatype:
+# - UTF8, UTF-8 and STRING registers are read and decoded the same way
+#   (C-style NUL-terminated / padded), but are NOT exported as Prometheus metrics.
 # - Prometheus only supports numeric samples.
-# - UTF8 registers may be used for debugging or future metadata endpoints.
+# - These registers may be used for debugging or future metadata endpoints.
 
 # Gain:
 # - Gain is applied after decoding the raw register value.

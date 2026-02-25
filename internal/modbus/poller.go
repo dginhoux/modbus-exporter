@@ -137,7 +137,7 @@ func (p *Poller) pollOnce() {
 					continue
 				}
 
-				if reg.Datatype == "UTF8" {
+				if reg.Datatype == "UTF8" || reg.Datatype == "UTF-8" || reg.Datatype == "STRING" {
 					decoded := UTF8(raw)
 					if p.debug {
 						log.Printf(
