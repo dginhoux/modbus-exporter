@@ -10,14 +10,16 @@ import (
 )
 
 type Server struct {
-	addr  string
-	store *store.Store
+	addr             string
+	store            *store.Store
+	sampleAgeEnabled bool
 }
 
-func New(addr string, store *store.Store) *Server {
+func New(addr string, store *store.Store, sampleAgeEnabled bool) *Server {
 	return &Server{
-		addr:  addr,
-		store: store,
+		addr:             addr,
+		store:            store,
+		sampleAgeEnabled: sampleAgeEnabled,
 	}
 }
 
@@ -78,29 +80,31 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 
 
-	for _, sm := range samples {
-		labelSet := map[string]string{
-			"device":      sm.Device,
-			"slave":       fmt.Sprintf("%d", sm.SlaveID),
-			"slave_name":  sm.SlaveName,
-			"register":    fmt.Sprintf("%d", sm.Register),
-			"ip_address":  sm.IpAddress,
-		}
+	if s.sampleAgeEnabled {
+		for _, sm := range samples {
+			labelSet := map[string]string{
+				"device":      sm.Device,
+				"slave":       fmt.Sprintf("%d", sm.SlaveID),
+				"slave_name":  sm.SlaveName,
+				"register":    fmt.Sprintf("%d", sm.Register),
+				"ip_address":  sm.IpAddress,
+			}
 
-		for k, v := range sm.DeviceLabels {
-			labelSet["device_label_"+k] = v
-		}
-		for k, v := range sm.SlaveLabels {
-			labelSet["slave_label_"+k] = v
-		}
+			for k, v := range sm.DeviceLabels {
+				labelSet["device_label_"+k] = v
+			}
+			for k, v := range sm.SlaveLabels {
+				labelSet["slave_label_"+k] = v
+			}
 
-		age := now.Sub(sm.Timestamp).Seconds()
-		fmt.Fprintf(
-			w,
-			"modbus_sample_age_seconds{%s} %f\n",
-			formatLabels(labelSet),
-			age,
-		)
+			age := now.Sub(sm.Timestamp).Seconds()
+			fmt.Fprintf(
+				w,
+				"modbus_sample_age_seconds{%s} %f\n",
+				formatLabels(labelSet),
+				age,
+			)
+		}
 	}
 }
 

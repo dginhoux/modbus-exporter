@@ -1,4 +1,5 @@
 poll_interval: 60s
+sample_age_enabled: true
 
 devices:
   - name: "ion_7400"

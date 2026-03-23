@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	PollInterval time.Duration `yaml:"poll_interval"`
-	Devices      []Device      `yaml:"devices"`
+	PollInterval      time.Duration `yaml:"poll_interval"`
+	Devices           []Device      `yaml:"devices"`
+	SampleAgeEnabled  *bool         `yaml:"sample_age_enabled,omitempty"`
 }
 
 type Device struct {

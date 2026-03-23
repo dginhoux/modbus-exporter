@@ -62,44 +62,8 @@
 # - Use gain to apply scaling factors documented by the vendor.
 
 
-
-# docker run \
-#   --env "TZ=Europe/Paris" \
-#   --publish 9105:9105 \
-#   --volume /home/dginhoux/mb.yml:/home/dginhoux/mb.yml:rw \
-#   atrabilis/modbus-exporter:v0.1.2 --config /home/dginhoux/mb.yml --debug
-
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30977 | awk '/\[[0-9]+\]:/ {print "OUPUT I : "$2/1000}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30783 | awk '/\[[0-9]+\]:/ {print "OUPUT V : "$2/100}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30777 | awk '/\[[0-9]+\]:/ {print "OUPUT P : "$2}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30815 | awk '/\[[0-9]+\]:/ {print "OUPUT VA : "$2}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30803 | awk '/\[[0-9]+\]:/ {print "OUPUT F : "$2/100}'
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30769 | awk '/\[[0-9]+\]:/ {print "INPUT1 I: "$2/1000}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30957 | awk '/\[[0-9]+\]:/ {print "INPUT2 I: "$2/1000}'
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30959 | awk '/\[[0-9]+\]:/ {print "INPUT1 V: "$2/100}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30771 | awk '/\[[0-9]+\]:/ {print "INPUT2 V: "$2/100}'
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30773 | awk '/\[[0-9]+\]:/ {print "INPUT1 W: "$2}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30961 | awk '/\[[0-9]+\]:/ {print "INPUT2 W: "$2}'
-
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 31247 | awk '/\[[0-9]+\]:/ {print "INPUT I RESIDUAL : "$2/1000}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30225 | awk '/\[[0-9]+\]:/ {print "INPUT R : "$2}'
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30953 | awk '/\[[0-9]+\]:/ {print "TEMP : "$2/10}'
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30949 | awk '/\[[0-9]+\]:/ {print "FACTOR : "$2/1000}'
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 31221 | awk '/\[[0-9]+\]:/ {print "FACTOR : "$2/1000}'
-
-
-# mbpoll 192.168.50.212 -p 502 -a 3 -m tcp -o 2  -c 1 -0 -1 -t 4:int   -B -q -r 30543 | awk '/\[[0-9]+\]:/ {print "FEED-IN TIME : "$2}'
-
-
-
 poll_interval: 15s
+sample_age_enabled: false
 
 devices:
   - name: sma
