@@ -13,6 +13,7 @@ type Sample struct {
 	// Identidad
 	Device    string
 	SlaveID   int
+	SlaveName string
 	Register  int
 	Name      string
 	Unit      string

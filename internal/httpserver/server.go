@@ -53,9 +53,10 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 			// Registro UTF8: exponer como info (valor en etiqueta, gauge=1).
 			fmt.Fprintf(
 				w,
-				"modbus_register_info{device=%q,slave=%q,register=%q,name=%q,unit=%q,ip_address=%q,value=%q} 1\n",
+				"modbus_register_info{device=%q,slave=%q,slave_name=%q,register=%q,name=%q,unit=%q,ip_address=%q,value=%q} 1\n",
 				sm.Device,
 				fmt.Sprintf("%d", sm.SlaveID),
+				sm.SlaveName,
 				fmt.Sprintf("%d", sm.Register),
 				sm.Name,
 				sm.Unit,
@@ -66,9 +67,10 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 			// Registro numérico.
 			fmt.Fprintf(
 				w,
-				"modbus_value{device=%q,slave=%q,register=%q,name=%q,unit=%q,ip_address=%q} %f\n",
+				"modbus_value{device=%q,slave=%q,slave_name=%q,register=%q,name=%q,unit=%q,ip_address=%q} %f\n",
 				sm.Device,
 				fmt.Sprintf("%d", sm.SlaveID),
+				sm.SlaveName,
 				fmt.Sprintf("%d", sm.Register),
 				sm.Name,
 				sm.Unit,
@@ -82,9 +84,10 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 		age := now.Sub(sm.Timestamp).Seconds()
 		fmt.Fprintf(
 			w,
-			"modbus_sample_age_seconds{device=%q,slave=%q,register=%q,ip_address=%q} %f\n",
+			"modbus_sample_age_seconds{device=%q,slave=%q,slave_name=%q,register=%q,ip_address=%q} %f\n",
 			sm.Device,
 			fmt.Sprintf("%d", sm.SlaveID),
+			sm.SlaveName,
 			fmt.Sprintf("%d", sm.Register),
 			sm.IpAddress,
 			age,
