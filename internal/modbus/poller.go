@@ -77,9 +77,10 @@ func (p *Poller) pollOnce() {
 
 			if p.debug {
 				log.Printf(
-					"modbus: device=%s slave=%d start",
+					"modbus: device=%s slave=%d slave_name=%q start",
 					dev.Name,
 					slave.SlaveID,
+					slave.Name,
 				)
 			}
 
@@ -98,9 +99,10 @@ func (p *Poller) pollOnce() {
 
 				if p.debug {
 					log.Printf(
-						"modbus: device=%s slave=%d register=%d effective=%d words=%d function=%d",
+						"modbus: device=%s slave=%d slave_name=%q register=%d effective=%d words=%d function=%d",
 						dev.Name,
 						slave.SlaveID,
+						slave.Name,
 						reg.Register,
 						effective,
 						reg.Words,
@@ -141,9 +143,10 @@ func (p *Poller) pollOnce() {
 					decoded := UTF8(raw)
 					if p.debug {
 						log.Printf(
-							"modbus: device=%s slave=%d register=%d name=%s value=%q (UTF8)",
+							"modbus: device=%s slave=%d slave_name=%q register=%d name=%s value=%q (UTF8)",
 							dev.Name,
 							slave.SlaveID,
+							slave.Name,
 							reg.Register,
 							reg.Name,
 							decoded,
@@ -178,11 +181,28 @@ func (p *Poller) pollOnce() {
 
 				value *= reg.Gain
 
+				if reg.IgnoreNegative && value < 0 {
+					if p.debug {
+						log.Printf(
+							"modbus: device=%s slave=%d slave_name=%q register=%d name=%s value=%.6f %s ignored (negative)",
+							dev.Name,
+							slave.SlaveID,
+							slave.Name,
+							reg.Register,
+							reg.Name,
+							value,
+							reg.Unit,
+						)
+					}
+					continue
+				}
+
 				if p.debug {
 					log.Printf(
-						"modbus: device=%s slave=%d register=%d name=%s value=%.6f %s",
+						"modbus: device=%s slave=%d slave_name=%q register=%d name=%s value=%.6f %s",
 						dev.Name,
 						slave.SlaveID,
+						slave.Name,
 						reg.Register,
 						reg.Name,
 						value,

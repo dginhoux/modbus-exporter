@@ -30,15 +30,16 @@ type Slave struct {
 }
 
 type Register struct {
-	Register     int          `yaml:"register"`
-	FunctionCode int          `yaml:"function_code"`
-	Name         string       `yaml:"name"`
-	Description  string       `yaml:"description"`
-	Words        int          `yaml:"words"`
-	Datatype     string       `yaml:"datatype"`
-	Unit         string       `yaml:"unit"`
-	Gain         float64      `yaml:"gain"`
-	Flags        RegisterFlag `yaml:"flags,omitempty"`
+	Register       int          `yaml:"register"`
+	FunctionCode   int          `yaml:"function_code"`
+	Name           string       `yaml:"name"`
+	Description    string       `yaml:"description"`
+	Words          int          `yaml:"words"`
+	Datatype       string       `yaml:"datatype"`
+	Unit           string       `yaml:"unit"`
+	Gain           float64      `yaml:"gain"`
+	IgnoreNegative bool         `yaml:"ignore_negative,omitempty"`
+	Flags          RegisterFlag `yaml:"flags,omitempty"`
 }
 
 type RegisterFlag struct {
