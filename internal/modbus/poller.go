@@ -161,8 +161,11 @@ func (p *Poller) pollOnce() {
 						Register:    reg.Register,
 						Name:        reg.Name,
 						Unit:        reg.Unit,
-						IpAddress:   dev.Address,					DeviceLabels: dev.Labels,
-					SlaveLabels:  slave.Labels,						StringValue: &decoded,
+						IpAddress:   dev.Address,
+						MetricName:  dev.MetricName,
+						DeviceLabels: dev.Labels,
+						SlaveLabels:  slave.Labels,
+						StringValue: &decoded,
 					})
 					continue
 				}
@@ -220,6 +223,7 @@ func (p *Poller) pollOnce() {
 					Name:        reg.Name,
 					Unit:        reg.Unit,
 					IpAddress:   dev.Address,
+					MetricName:  dev.MetricName,
 					DeviceLabels: dev.Labels,
 					SlaveLabels:  slave.Labels,
 				})

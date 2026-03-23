@@ -18,10 +18,11 @@ type Device struct {
 	Protocol string            `yaml:"protocol"`
 	Address  string            `yaml:"address"`
 	Port     int               `yaml:"port"`
-	Timeout  time.Duration     `yaml:"timeout"`
-	Flags    []string          `yaml:"flags,omitempty"`
-	Labels   map[string]string `yaml:"labels,omitempty"`
-	Slaves   []Slave           `yaml:"slaves"`
+	Timeout    time.Duration     `yaml:"timeout"`
+	MetricName string            `yaml:"metric_name,omitempty"`
+	Flags      []string          `yaml:"flags,omitempty"`
+	Labels     map[string]string `yaml:"labels,omitempty"`
+	Slaves     []Slave           `yaml:"slaves"`
 }
 
 type Slave struct {

@@ -75,7 +75,11 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 		if sm.StringValue != nil {
 			fmt.Fprintf(w, "modbus_register_info{%s,value=%q} 1\n", labelSet, *sm.StringValue)
 		} else {
-			fmt.Fprintf(w, "modbus_value{%s} %f\n", labelSet, sm.Value)
+			metricName := "modbus_value"
+			if sm.MetricName != "" {
+				metricName = sm.MetricName
+			}
+			fmt.Fprintf(w, "%s{%s} %f\n", metricName, labelSet, sm.Value)
 		}
 	}
 

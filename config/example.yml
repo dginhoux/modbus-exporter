@@ -7,6 +7,7 @@ devices:
     address: "192.168.1.65"
     port: 502
     timeout: 1s
+    metric_name: "ion_value"
     labels:
       site: "building_A"
       role: "main_meter"

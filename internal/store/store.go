@@ -18,6 +18,7 @@ type Sample struct {
 	Name        string
 	Unit        string
 	IpAddress   string
+	MetricName  string
 	DeviceLabels map[string]string
 	SlaveLabels  map[string]string
 
