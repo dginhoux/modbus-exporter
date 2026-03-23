@@ -107,10 +107,17 @@ devices:
     address: 192.168.50.212
     port: 502
     timeout: 2s
+    labels:
+      site: "garage"
+      role: "main"
+
     slaves:
       - name: sunnyboy4
         slave_id: 3
         offset: 0
+        labels:
+          power: 4000
+          strings: 2
         modbus_registers:
           - register: 30977
             function_code: 4
@@ -120,7 +127,7 @@ devices:
             datatype: S32
             unit: A
             gain: 0.001
-            ignore_negative: true
+            ignore_negative: false
             flags: 
 
           - register: 30783
@@ -131,7 +138,7 @@ devices:
             datatype: S32
             unit: V
             gain: 0.01
-            ignore_negative: true
+            ignore_negative: false
             flags: 
 
           - register: 30777
@@ -142,7 +149,7 @@ devices:
             datatype: S32
             unit: W
             gain: 1
-            ignore_negative: true
+            ignore_negative: false
             flags: 
 
           - register: 30815
@@ -153,7 +160,7 @@ devices:
             datatype: S32
             unit: VA
             gain: 1
-            ignore_negative: true
+            ignore_negative: false
             flags: 
 
           - register: 30803
@@ -164,7 +171,7 @@ devices:
             datatype: S32
             unit: Hz
             gain: 0.01
-            ignore_negative: true
+            ignore_negative: false
             flags: 
 
           - register: 30769

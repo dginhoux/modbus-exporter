@@ -13,20 +13,22 @@ type Config struct {
 }
 
 type Device struct {
-	Name     string        `yaml:"name"`
-	Protocol string        `yaml:"protocol"`
-	Address  string        `yaml:"address"`
-	Port     int           `yaml:"port"`
-	Timeout  time.Duration `yaml:"timeout"`
-	Flags    []string      `yaml:"flags,omitempty"`
-	Slaves   []Slave       `yaml:"slaves"`
+	Name     string            `yaml:"name"`
+	Protocol string            `yaml:"protocol"`
+	Address  string            `yaml:"address"`
+	Port     int               `yaml:"port"`
+	Timeout  time.Duration     `yaml:"timeout"`
+	Flags    []string          `yaml:"flags,omitempty"`
+	Labels   map[string]string `yaml:"labels,omitempty"`
+	Slaves   []Slave           `yaml:"slaves"`
 }
 
 type Slave struct {
-	Name      string     `yaml:"name"`
-	SlaveID   int        `yaml:"slave_id"`
-	Offset    int        `yaml:"offset"`
-	Registers []Register `yaml:"modbus_registers"`
+	Name      string            `yaml:"name"`
+	SlaveID   int               `yaml:"slave_id"`
+	Offset    int               `yaml:"offset"`
+	Labels    map[string]string `yaml:"labels,omitempty"`
+	Registers []Register        `yaml:"modbus_registers"`
 }
 
 type Register struct {
