@@ -114,6 +114,16 @@ func (p *Poller) pollOnce() {
 				var err error
 
 				switch reg.FunctionCode {
+				case 1:
+					raw, err = client.ReadCoils(
+						uint16(effective),
+						uint16(reg.Words),
+					)
+				case 2:
+					raw, err = client.ReadDiscreteInputs(
+						uint16(effective),
+						uint16(reg.Words),
+					)
 				case 3:
 					raw, err = client.ReadHoldingRegisters(
 						uint16(effective),
@@ -170,7 +180,13 @@ func (p *Poller) pollOnce() {
 					continue
 				}
 
-				value, ok := decode(reg.Datatype, raw)
+				var value float64
+				var ok bool
+				if reg.FunctionCode == 1 || reg.FunctionCode == 2 {
+					value, ok = decodeCoil(raw)
+				} else {
+					value, ok = decode(reg.Datatype, raw)
+				}
 				if !ok {
 					log.Printf(
 						"modbus: unsupported datatype device=%s slave=%d register=%d datatype=%s",
@@ -232,6 +248,13 @@ func (p *Poller) pollOnce() {
 
 		handler.Close()
 	}
+}
+
+func decodeCoil(raw []byte) (float64, bool) {
+	if len(raw) == 0 {
+		return 0, false
+	}
+	return float64(raw[0] & 0x01), true
 }
 
 func decode(datatype string, raw []byte) (float64, bool) {

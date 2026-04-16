@@ -62,6 +62,10 @@
 # - Use gain to apply scaling factors documented by the vendor.
 
 
+
+#  docker build -t me:1 --build-arg TARGETOS=linux --build-arg TARGETARCH=amd64  .
+#  docker run   --env "TZ=Europe/Paris"   --publish 9105:9105   --volume /home/dginhoux/modbus_exporter_work/3/modbus-exporter/config/example_sma_sunnyboy4.yml:/mb.yml:rw   me:1 --config /mb.yml --debug
+
 poll_interval: 15s
 sample_age_enabled: false
 
@@ -84,121 +88,133 @@ devices:
           power: 4000
           strings: 2
         modbus_registers:
-          - register: 30977
-            function_code: 4
-            name: output_current
+          # - register: 30977
+          #   function_code: 4
+          #   name: output_current
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: A
+          #   gain: 0.001
+          #   ignore_negative: false
+          #   flags: 
+
+          - register: 31017
+            function_code: 1
+            name: test
             description: ""
-            words: 2
-            datatype: S32
-            unit: A
-            gain: 0.001
+            words: 1
+            datatype: STRING
+            # unit: A
+            # gain: 0.001
             ignore_negative: false
             flags: 
 
-          - register: 30783
-            function_code: 4
-            name: output_voltage
-            description: ""
-            words: 2
-            datatype: S32
-            unit: V
-            gain: 0.01
-            ignore_negative: false
-            flags: 
+          # - register: 30783
+          #   function_code: 4
+          #   name: output_voltage
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: V
+          #   gain: 0.01
+          #   ignore_negative: false
+          #   flags: 
 
-          - register: 30777
-            function_code: 4
-            name: output_power_watt
-            description: ""
-            words: 2
-            datatype: S32
-            unit: W
-            gain: 1
-            ignore_negative: false
-            flags: 
+          # - register: 30777
+          #   function_code: 4
+          #   name: output_power_watt
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: W
+          #   gain: 1
+          #   ignore_negative: false
+          #   flags: 
 
-          - register: 30815
-            function_code: 4
-            name: output_power_va
-            description: ""
-            words: 2
-            datatype: S32
-            unit: VA
-            gain: 1
-            ignore_negative: false
-            flags: 
+          # - register: 30815
+          #   function_code: 4
+          #   name: output_power_va
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: VA
+          #   gain: 1
+          #   ignore_negative: false
+          #   flags: 
 
-          - register: 30803
-            function_code: 4
-            name: output_frequency
-            description: ""
-            words: 2
-            datatype: S32
-            unit: Hz
-            gain: 0.01
-            ignore_negative: false
-            flags: 
+          # - register: 30803
+          #   function_code: 4
+          #   name: output_frequency
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: Hz
+          #   gain: 0.01
+          #   ignore_negative: false
+          #   flags: 
 
-          - register: 30769
-            function_code: 4
-            name: input_current_1
-            description: "aaaa"
-            words: 2
-            datatype: S32
-            unit: A
-            gain: 0.001
-            ignore_negative: true
-            flags: 
-          - register: 30957
-            function_code: 4
-            name: input_current_1
-            description: "aaaaa"
-            words: 2
-            datatype: S32
-            unit: A
-            gain: 0.001
-            ignore_negative: true
-            flags: 
+          # - register: 30769
+          #   function_code: 4
+          #   name: input_current_1
+          #   description: "aaaa"
+          #   words: 2
+          #   datatype: S32
+          #   unit: A
+          #   gain: 0.001
+          #   ignore_negative: true
+          #   flags: 
+          # - register: 30957
+          #   function_code: 4
+          #   name: input_current_1
+          #   description: "aaaaa"
+          #   words: 2
+          #   datatype: S32
+          #   unit: A
+          #   gain: 0.001
+          #   ignore_negative: true
+          #   flags: 
 
-          - register: 30959
-            function_code: 4
-            name: input_voltage_1
-            description: ""
-            words: 2
-            datatype: S32
-            unit: Hz
-            gain: 0.01
-            ignore_negative: true
-            flags: 
-          - register: 30771
-            function_code: 4
-            name: input_voltage_2
-            description: ""
-            words: 2
-            datatype: S32
-            unit: Hz
-            gain: 0.01
-            ignore_negative: true
-            flags: 
+          # - register: 30959
+          #   function_code: 4
+          #   name: input_voltage_1
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: Hz
+          #   gain: 0.01
+          #   ignore_negative: true
+          #   flags: 
+          # - register: 30771
+          #   function_code: 4
+          #   name: input_voltage_2
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: Hz
+          #   gain: 0.01
+          #   ignore_negative: true
+          #   flags: 
 
-          - register: 30773
-            function_code: 4
-            name: input_power_1
-            description: ""
-            words: 2
-            datatype: S32
-            unit: W
-            gain: 1
-            ignore_negative: true
-            flags: 
-          - register: 30961
-            function_code: 4
-            name: input_power_2
-            description: ""
-            words: 2
-            datatype: S32
-            unit: W
-            gain: 1
-            ignore_negative: true
-            flags: 
+          # - register: 30773
+          #   function_code: 4
+          #   name: input_power_1
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: W
+          #   gain: 1
+          #   ignore_negative: true
+          #   flags: 
+          # - register: 30961
+          #   function_code: 4
+          #   name: input_power_2
+          #   description: ""
+          #   words: 2
+          #   datatype: S32
+          #   unit: W
+          #   gain: 1
+          #   ignore_negative: true
+          #   flags: 
 
+          
